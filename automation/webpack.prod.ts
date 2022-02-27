@@ -2,12 +2,7 @@ import merge from "webpack-merge";
 import SentryPlugin from '@sentry/webpack-plugin';
 import common from "./webpack.common";
 
-const shouldPublishSentryRelease =
-    process.env.SENTRY_AUTH_TOKEN && process.env.UI_VERSION;
-console.log(shouldPublishSentryRelease
-    ? "* Webpack will upload source map to Sentry *"
-    : "Sentry source map upload disabled - no token set"
-);
+
 
 export default merge(common, {
     mode: "production",
@@ -32,13 +27,5 @@ export default merge(common, {
         }
     },
 
-    plugins: shouldPublishSentryRelease
-        ? [
-            new SentryPlugin({
-                release: process.env.UI_VERSION,
-                include: common!.output!.path!,
-                validate: true
-            })
-        ]
-        : []
+
 });

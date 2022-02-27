@@ -8,6 +8,9 @@
     for = "/*"
     [headers.values]
         Content-Security-Policy = "frame-ancestors 'none'"
+        Access-Control-Allow-Origin = "*"
+        Access-Control-Allow-Methods = 'GET, POST, PATCH, PUT, DELETE, OPTIONS'
+        Access-Control-Allow-Headers = 'Origin, Content-Type, X-Auth-Token'
 
 [[headers]]
     for = "/*.wasm"

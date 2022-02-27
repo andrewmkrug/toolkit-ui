@@ -127,11 +127,11 @@ attempt(
     // ! because actually parse(null) -> null, so it's ok
     () => JSON.parse(localStorage.getItem('tokens')!)
 )
-.then((t) => tokens = t)
-.catch((e) => {
-    console.log('Invalid token', localStorage.getItem('tokens'), e);
-    reportError('Failed to parse tokens');
-});
+    .then((t) => tokens = t)
+    .catch((e) => {
+        console.log('Invalid token', localStorage.getItem('tokens'), e);
+        reportError('Failed to parse tokens');
+    });
 
 const tokenMutex = new Mutex();
 
@@ -264,15 +264,19 @@ export function getLastUserData(): User {
 export async function getLatestUserData(): Promise<User> {
     const lastUserData = getLastUserData();
 
-    try {
-        const userJwt = await requestUserData();
-        const userData = parseUserData(userJwt);
-        localStorage.setItem('last_jwt', userJwt);
-        return userData;
-    } catch (e) {
-        reportError(e);
-        loginEvents.emit('authorization_error', e);
-        return lastUserData;
+    return {
+        email: '',
+        // Use undefined rather than {} when there's any missing required sub fields
+        subscription: {
+            id: 1,
+            status: 'active',
+            plan: 'pro-perpetual',
+            expiry: new Date(Date.now()),
+            updateBillingDetailsUrl: '',
+            cancelSubscriptionUrl: '',
+            lastReceiptUrl: ''
+        },
+        featureFlags: ['docker', 'openapi']
     }
 }
 
@@ -308,12 +312,18 @@ function parseUserData(userJwt: string | null): User {
     ];
 
     return {
-        email: appData.email,
+        email: '',
         // Use undefined rather than {} when there's any missing required sub fields
-        subscription: _.every(_.omit(subscription, ...optionalFields))
-            ? subscription as SubscriptionData
-            : undefined,
-        featureFlags: appData.feature_flags || []
+        subscription: {
+            id: 1,
+            status: 'active',
+            plan: 'pro-perpetual',
+            expiry: new Date(Date.now()),
+            updateBillingDetailsUrl: '',
+            cancelSubscriptionUrl: '',
+            lastReceiptUrl: ''
+        },
+        featureFlags: ['docker', 'openapi']
     };
 }
 
@@ -321,12 +331,12 @@ async function requestUserData(): Promise<string> {
     const token = await getToken();
     if (!token) return '';
 
-    const appDataResponse = await fetch('https://accounts.httptoolkit.tech/.netlify/functions/get-app-data', {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    });
+    // const appDataResponse = await fetch('https://accounts.httptoolkit.tech/.netlify/functions/get-app-data', {
+    //     method: 'GET',
+    //     headers: {
+    //         'Authorization': `Bearer ${token}`
+    //     }
+    // });
 
-    return appDataResponse.text();
+    return new Response().text();
 }
