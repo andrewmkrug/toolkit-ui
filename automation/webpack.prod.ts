@@ -1,5 +1,4 @@
 import merge from "webpack-merge";
-import SentryPlugin from '@sentry/webpack-plugin';
 import common from "./webpack.common";
 
 
