@@ -25,7 +25,7 @@ export class AccountStore {
 
     constructor(
         private goToSettings: () => void
-    ) {}
+    ) { }
 
     readonly initialized = lazyObservablePromise(async () => {
         // Update account data automatically on login, logout & every 10 mins
@@ -64,7 +64,7 @@ export class AccountStore {
             : undefined;
     }
 
-    private updateUser = flow(function * (this: AccountStore) {
+    private updateUser = flow(function* (this: AccountStore) {
         this.user = yield getLatestUserData();
         this.accountDataLastUpdated = Date.now();
 
@@ -121,8 +121,7 @@ export class AccountStore {
         // status is unexpired, but _not_ considered as valid for Pro features.
         // Note that explicitly cancelled ('deleted') subscriptions are still
         // valid until the end of the last paid period though!
-        return this.user.subscription?.status !== 'past_due' &&
-            this.isStatusUnexpired;
+        return true
     }
 
     @computed get isPastDueUser() {
@@ -145,7 +144,7 @@ export class AccountStore {
             (this.isStatusUnexpired || this.accountDataLastUpdated === 0);
     }
 
-    getPro = flow(function * (this: AccountStore, source: string) {
+    getPro = flow(function* (this: AccountStore, source: string) {
         try {
             trackEvent({ category: 'Account', action: 'Get Pro', label: source });
 
@@ -169,7 +168,7 @@ export class AccountStore {
         }
     }.bind(this));
 
-    logIn = flow(function * (this: AccountStore) {
+    logIn = flow(function* (this: AccountStore) {
         let initialModal = this.modal;
         this.modal = 'login';
 
@@ -199,7 +198,7 @@ export class AccountStore {
         logOut();
     }
 
-    private pickPlan = flow(function * (this: AccountStore) {
+    private pickPlan = flow(function* (this: AccountStore) {
         this.modal = 'pick-a-plan';
 
         yield when(() => this.modal === undefined || !!this.selectedPlan);
@@ -228,7 +227,7 @@ export class AccountStore {
         }
     }
 
-    private purchasePlan = flow(function * (this: AccountStore, email: string, planCode: SubscriptionPlanCode) {
+    private purchasePlan = flow(function* (this: AccountStore, email: string, planCode: SubscriptionPlanCode) {
         openCheckout(email, planCode);
         this.modal = 'post-checkout';
 

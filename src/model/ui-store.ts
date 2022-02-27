@@ -29,9 +29,9 @@ export class UiStore {
         // paid settings to the free defaults. This ensures that they're reset on
         // logout & subscription expiration (even if that happened while the app was
         // closed), but don't get reset when the app starts with stale account data.
-        observe(this.accountStore, 'accountDataLastUpdated', () => {
-            if (!this.accountStore.isPaidUser) this.setTheme('light');
-        });
+        // observe(this.accountStore, 'accountDataLastUpdated', () => {
+        //     if (!this.accountStore.isPaidUser) this.setTheme('light');
+        // });
 
         await hydrate({
             key: 'ui-store',
@@ -53,7 +53,7 @@ export class UiStore {
     }
 
     @persist @observable
-    private _themeName: ThemeName | 'custom' = 'light';
+    private _themeName: ThemeName | 'custom' = 'high-contrast';
 
     get themeName() {
         return this._themeName;

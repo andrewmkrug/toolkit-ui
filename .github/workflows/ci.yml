@@ -23,20 +23,19 @@ jobs:
       - run: npm run test:unit
 
       # Build & run normal integration tests:
-      - name: Build & test
-        run: npm run test:integration
-        if: github.ref != 'refs/heads/master'
+      # - name: Build & test
+      #   run: npm run test:integration
+      #   if: github.ref != 'refs/heads/master'
 
       # Build with secrets & run integrations tests, on master only:
-      - name: Build & test for production release
-        run: npm run test:integration
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        env:
-          GA_ID: ${{ secrets.GA_ID }}
-          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-          SENTRY_ORG: http-toolkit
-          SENTRY_PROJECT: httptoolkit-ui
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      - name: Build for production release
+        run: npm run build
+        # env:
+        #   GA_ID: ${{ secrets.GA_ID }}
+        #   SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+        #   SENTRY_ORG: http-toolkit
+        #   SENTRY_PROJECT: httptoolkit-ui
+        #   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
       - uses: actions/upload-artifact@v2
         with:
@@ -45,7 +44,7 @@ jobs:
           if-no-files-found: error
 
   publish:
-    name: Deploy ${{ (github.ref == 'refs/heads/master' && 'to production') || 'preview' }}
+    name: Deploy ${{ (github.ref == 'refs/heads/main' && 'to production') || 'preview' }}
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     container: httptoolkit/act-build-base
