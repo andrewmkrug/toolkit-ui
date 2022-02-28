@@ -159,7 +159,7 @@ const highlights = {
     black: '#000',
     grey: '#888',
     red: '#ce3939',
-    green: '#4caf7d',
+    green: '#38ff65',
     orange: '#ff8c38',
     yellow: '#e9f05b',
     lightBlue: '#2fb4e0',
