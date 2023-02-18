@@ -44,7 +44,7 @@
     "@types/auth0-lock": "^11.4.10",
     "@types/base64-arraybuffer": "^0.1.0",
     "@types/dedent": "^0.7.0",
-    "@types/dompurify": "0.0.32",
+    "@types/dompurify": "0.0.33",
     "@types/har-format": "^1.2.5",
     "@types/inline-style-prefixer": "^3.0.1",
     "@types/js-beautify": "^1.8.0",
